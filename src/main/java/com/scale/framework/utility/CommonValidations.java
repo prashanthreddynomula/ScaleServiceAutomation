@@ -58,16 +58,8 @@ public class CommonValidations {
     protected void setHeaderParameters(String[] headerParameters) {
         scenario.write("Header parameters are : ");
         for (String headerParameter : headerParameters) {
-            if (!scenarioContext.getContext("queryParameter").isEmpty()) {
-                if (scenarioContext.getContext("queryParameter").equalsIgnoreCase("empty")) {
-                    scenario.write(headerParameter + " - " + " ");
-                    apiUtil.setHeader(headerParameter, "");
-                }
-            } else {
                 scenario.write(headerParameter + " - " + scenarioContext.getContext(headerParameter));
                 apiUtil.setHeader(headerParameter, scenarioContext.getContext(headerParameter));
-
-            }
         }
     }
 
@@ -85,22 +77,24 @@ public class CommonValidations {
 
     public void getResponse() {
         response = apiUtil.getRequest(scenarioContext.getContext("Endpoint"));
+        System.out.println("Response code is "+ response.prettyPrint());
         responseTypeValidator(response);
     }
 
     public void postResponse() {
-        response = apiUtil.getRequest(scenarioContext.getContext("Endpoint"));
-        scenario.write("CURL for the call -" + apiUtil.getCurl());
-        if (response.contentType().contains("json") || response.contentType().contains("Json")) {
-            jsonObject = new JSONObject(response.jsonPath().prettyPrint());
-            scenario.write("Response for the above request is " + jsonObject.toString());
-        } else if (scenarioContext.getContext("ExpectedStatus").equalsIgnoreCase("201")) {
-            scenario.write("Response for 201 contains no body hence no implementation is required for body validation");
-            Assert.assertTrue("The response of the request is 201 ", true);
-        } else {
-            scenario.write("Response type is not json, please verify the result in console");
-            fail("Content type is not json");
-        }
+        response = apiUtil.postRequest(scenarioContext.getContext("EndPoint"));
+        scenario.write("CURL for the call - " + apiUtil.getCurl());
+        System.out.println("Response code is "+ response.prettyPrint());
+//        if (response.contentType().contains("json") || response.contentType().contains("Json")) {
+//            jsonObject = new JSONObject(response.jsonPath().prettyPrint());
+//            scenario.write("Response for the above request is " + jsonObject.toString());
+//        } else if (scenarioContext.getContext("ExpectedStatus").equalsIgnoreCase("201")) {
+//            scenario.write("Response for 201 contains no body hence no implementation for body validation");
+//            junit.framework.Assert.assertTrue("The response code is 201 created", true);
+//        } else {
+//            scenario.write("Response type is not Json, please check with the developer");
+//            fail("The content type is not json");
+//        }
     }
 
     public void deleteResponse() {

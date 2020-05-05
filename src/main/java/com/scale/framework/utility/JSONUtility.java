@@ -25,7 +25,7 @@ public class JSONUtility {
 
     public static void main(String []args) throws Exception {
         JSONUtility obj = new JSONUtility();
-        obj.convertExcelToJsonFile("DataSheet.xlsx");
+        obj.convertExcelToJsonFile("ServiceTestData.xlsx");
     }
 
     /**
@@ -46,6 +46,7 @@ public class JSONUtility {
         {
             //parentObject = new JSONObject();
             Row row = sheet.getRow(rowNum);
+            System.out.println(rowNum);
             int num_of_Cells = row.getPhysicalNumberOfCells();
             JSONObject childObject = new JSONObject();
             for(int cellNum=1; cellNum<num_of_Cells; cellNum++)
@@ -136,8 +137,9 @@ public class JSONUtility {
     protected void createJSONFile(JSONObject jsonObject, String filename) throws IOException {
         FileWriter file = null;
         try {
-            file = new FileWriter(JSONPath+filename+".json");
+            file = new FileWriter(excelPath + "JSONs" +File.separator+filename+".json");
             file.write(jsonObject.toString());
+            System.out.println("This is the json object =" +jsonObject.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

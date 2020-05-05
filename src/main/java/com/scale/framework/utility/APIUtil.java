@@ -96,7 +96,7 @@ public class APIUtil {
     }
 
     public Response postRequest(String path) {
-        response = request.config(config).request("post",path);
+        response = request.config(config).request("post", path);
         return response;
     }
 
